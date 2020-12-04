@@ -77,7 +77,7 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 	while (a-- > 0){
 		i = 8;
 		lineaCache[a].ETQ = 0xFF;
-		while (i-- > 8){
+		while (i-- > 0){
 			lineaCache[a].Datos[i] = 0; 
 		}
 		
