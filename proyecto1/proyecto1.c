@@ -49,10 +49,12 @@ int main (int argc,char **argv){
 		  printf("Ha habido un error en la linea %02X con la etiqueta %X\n", camposD[1], lineaCache[camposD[1]].ETQ);
 		  lineaCache[camposD[1]].ETQ = camposD[2];
 		  mover = acceso & 0b1111111000;
-		  mover +=  8; 
+		  //mover +=  8; 
 		  printf("Datos: ");
 		  for(i = 0; i < 8; i++){
-			lineaCache[camposD[1]].Datos[i] = RAM[(mover--)];
+			lineaCache[camposD[1]].Datos[i] = RAM[(mover++)];
+		  }
+		  while(i--){
 			printf("%X", lineaCache[camposD[1]].Datos[i]);
 		    printf(" ");
 		  }
@@ -63,9 +65,7 @@ int main (int argc,char **argv){
 	}
 	texto[tamTexto] = '\0';
 	printf("%s", texto);
-	//printf("Hola\n");
 	fclose(f);
-
 
    return 0;
 }
