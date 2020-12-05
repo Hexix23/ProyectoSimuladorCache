@@ -48,8 +48,7 @@ int main (int argc,char **argv){
 		if(lineaCache[camposD[1]].ETQ != camposD[2]){
 		  printf("Ha habido un error en la linea %02X con la etiqueta %X\n", camposD[1], lineaCache[camposD[1]].ETQ);
 		  lineaCache[camposD[1]].ETQ = camposD[2];
-		  mover = acceso & 0b1111111000;
-		  //mover +=  8; 
+		  mover = acceso & 0b1111111000; 
 		  printf("Datos: ");
 		  for(i = 0; i < 8; i++){
 			lineaCache[camposD[1]].Datos[i] = RAM[(mover++)];
