@@ -60,8 +60,11 @@ int main (int argc,char **argv){
 		  }
 		  printf("\n");
 		}
+		else{
+			printf("Acierto de cache....\n");
+		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
-		Sleep(2);
+		Sleep(2000);
 	}
 	texto[tamTexto] = '\0';
 	printf("%s", texto);
