@@ -58,6 +58,8 @@ int main (int argc,char **argv){
 		    printf(" ");
 		  }
 		  printf("\n");
+		  numfallos++;
+		  tiempoglobal += 10;
 		}
 		else{
 			printf("Acierto de cache....\n");
