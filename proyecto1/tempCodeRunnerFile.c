@@ -1,0 +1,1 @@
+char comprobarCache(FILE *f, FILE *ram, int *campos, unsigned char RAM[1024]);

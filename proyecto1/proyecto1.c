@@ -13,7 +13,7 @@ typedef struct{
 int leerFichero(FILE *f);
 int* separarCampos(int acceso);
 void inicializarCache(T_LINEA_CACHE*  lineaCache); 
-
+char comprobarCache(FILE *f, FILE *ram, int *campos, unsigned char RAM[1024], T_LINEA_CACHE*  lineaCache);
 
 
 /* Función principal */
@@ -40,9 +40,16 @@ int main (int argc,char **argv){
 	while (!feof(f)){
 		acceso = leerFichero(f);
 		campos = separarCampos(acceso); 
-		printf("Campo 1: %d // Campo 2: %d // Campo 3: %d\n", campos[0], campos[1], campos[2]);
+		comprobarCache(f,ram,campos,RAM,lineaCache);
+		//printf("Campo 1: %d // Campo 2: %d // Campo 3: %d\n", campos[0], campos[1], campos[2]);
+		_sleep(2000);
 	}
 	fclose(f);
+
+//	printf("---------------------------\n");
+
+//	for(int i = 0; i < 12; i++)
+//		printf("Campo 1: %d // Campo 2: %d // Campo 3: %d\n", campos[0], campos[1], campos[2]);
 
  /* if (f==NULL){
    printf("Error al abrir fichero.txt");
@@ -83,4 +90,17 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 		
 	}
 	
+}
+char comprobarCache(FILE *f, FILE *ram, int *campos, unsigned char RAM[1024], T_LINEA_CACHE*  lineaCache){
+	int bloque;
+	char c;
+	bloque = campos[1] + campos[2];
+
+	if(campos[2] != lineaCache[0].ETQ){
+		lineaCache[0].ETQ = campos[2];
+		printf("Esto es la ETQ de la cache ->%d\n",lineaCache[0].ETQ);
+	}
+//	printf("Campo 1: %d // Campo 2: %d // Campo 3: %d // Bloque: %d\n", campos[0], campos[1], campos[2], bloque);
+
+	return c;
 }
