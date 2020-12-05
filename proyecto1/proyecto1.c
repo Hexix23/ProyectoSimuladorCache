@@ -21,7 +21,11 @@ int main (int argc,char **argv){
 	FILE *f = NULL;
 	FILE *ram;
 	unsigned char RAM[1024];
+	char texto[100];
+	int tamTexto;
 	int acceso;
+	int mover;
+	int i;
 	int camposD[3];
 	T_LINEA_CACHE lineaCache[4];
 
@@ -40,18 +44,26 @@ int main (int argc,char **argv){
 	
 	while (!feof(f)){
 		acceso = leerFichero(f);
-		//printf("%X\n", acceso);
 		separarCampos(acceso, camposD); 
-		//printf("Campo 1: %X // Campo 2: %X // Campo 3: %X\n", camposD[0], camposD[1], camposD[2]);
 		if(lineaCache[camposD[1]].ETQ != camposD[2]){
-			  printf("Ha habido un error en la linea %02X con la etiqueta %X\n", camposD[1], lineaCache[camposD[1]].ETQ);
-			  lineaCache[camposD[1]].ETQ = camposD[2];
-		}else{
-			printf("Todo gucci\n");
+		  printf("Ha habido un error en la linea %02X con la etiqueta %X\n", camposD[1], lineaCache[camposD[1]].ETQ);
+		  lineaCache[camposD[1]].ETQ = camposD[2];
+		  mover = acceso & 0b1111111000;
+		  mover +=  8; 
+		  printf("Datos: ");
+		  for(i = 0; i < 8; i++){
+			lineaCache[camposD[1]].Datos[i] = RAM[(mover--)];
+			printf("%X", lineaCache[camposD[1]].Datos[i]);
+		    printf(" ");
+		  }
+		  printf("\n");
 		}
-		Sleep(2000);
+		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
+		Sleep(2);
 	}
-	printf("Hola\n");
+	texto[tamTexto] = '\0';
+	printf("%s", texto);
+	//printf("Hola\n");
 	fclose(f);
 
 
@@ -59,23 +71,17 @@ int main (int argc,char **argv){
 }
 
 int leerFichero(FILE *f){
-	char numADDR[5];  //¿porque es un array de 5?
+	char numADDR[5]; 
 
 	fscanf(f, "%s", numADDR);
-	//printf("%s\n", numADDR);
 	return (int)strtol(numADDR, NULL, 16);
 }
 void separarCampos(int acceso, int *camposD){
-	//int *camposD = (int*)malloc(3 * sizeof(int));
-	//int camposD[3];
 
 	camposD[0] = acceso & 0b111;
 	camposD[1] = acceso >> 3 & 0b11;
 	camposD[2] = acceso >> 5 & 0b11111;
-	
-	//printf("Campo 1: %X // Campo 2: %X // Campo 3: %X\n", camposD[0], camposD[1], camposD[2]);
-	
-	//return camposD;
+
 }
 
 void inicializarCache(T_LINEA_CACHE  * lineaCache){
