@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
+// para linux usar #include <unistd.h>
 
 int numfallos = 0;
 float tiempoglobal = 0;
@@ -11,10 +13,8 @@ typedef struct{
 } T_LINEA_CACHE;
 
 int leerFichero(FILE *f);
-int* separarCampos(int acceso);
-void inicializarCache(T_LINEA_CACHE*  lineaCache); 
-char comprobarCache(FILE *f, FILE *ram, int *campos, unsigned char RAM[1024], T_LINEA_CACHE*  lineaCache);
-
+void separarCampos(int acceso, int *camposD);
+void inicializarCache(T_LINEA_CACHE*  lineaCache);
 
 /* Función principal */
 int main (int argc,char **argv){
@@ -22,7 +22,7 @@ int main (int argc,char **argv){
 	FILE *ram;
 	unsigned char RAM[1024];
 	int acceso;
-	int *campos;
+	int camposD[3];
 	T_LINEA_CACHE lineaCache[4];
 
 /*Inicializamos Cache*/
@@ -30,7 +30,8 @@ int main (int argc,char **argv){
 
 /*Leemos RAM*/
 	ram = fopen("RAM.bin", "rb"); //abre archivo en modo binario
-	rewind(ram);  // no entiendo muy bien la funcion del rewind
+	
+	rewind(ram);  
 	fgets(RAM, 1024, ram);
 	fclose(ram);
 
@@ -39,25 +40,21 @@ int main (int argc,char **argv){
 	
 	while (!feof(f)){
 		acceso = leerFichero(f);
-		campos = separarCampos(acceso); 
-		comprobarCache(f,ram,campos,RAM,lineaCache);
-		//printf("Campo 1: %d // Campo 2: %d // Campo 3: %d\n", campos[0], campos[1], campos[2]);
-		_sleep(2000);
+		//printf("%X\n", acceso);
+		separarCampos(acceso, camposD); 
+		//printf("Campo 1: %X // Campo 2: %X // Campo 3: %X\n", camposD[0], camposD[1], camposD[2]);
+		if(lineaCache[camposD[1]].ETQ != camposD[2]){
+			  printf("Ha habido un error en la linea %02X con la etiqueta %X\n", camposD[1], lineaCache[camposD[1]].ETQ);
+			  lineaCache[camposD[1]].ETQ = camposD[2];
+		}else{
+			printf("Todo gucci\n");
+		}
+		Sleep(2000);
 	}
+	printf("Hola\n");
 	fclose(f);
 
-//	printf("---------------------------\n");
 
-//	for(int i = 0; i < 12; i++)
-//		printf("Campo 1: %d // Campo 2: %d // Campo 3: %d\n", campos[0], campos[1], campos[2]);
-
- /* if (f==NULL){
-   printf("Error al abrir fichero.txt");
-   return -1;
-  }else if (f2==NULL){
-   	printf("Error al abrir fichero2.txt");
-   		return -1;
-  	}*/
    return 0;
 }
 
@@ -65,16 +62,20 @@ int leerFichero(FILE *f){
 	char numADDR[5];  //¿porque es un array de 5?
 
 	fscanf(f, "%s", numADDR);
+	//printf("%s\n", numADDR);
 	return (int)strtol(numADDR, NULL, 16);
 }
-int* separarCampos(int acceso){
-	int *camposD = malloc(3 * sizeof(int));
+void separarCampos(int acceso, int *camposD){
+	//int *camposD = (int*)malloc(3 * sizeof(int));
+	//int camposD[3];
 
 	camposD[0] = acceso & 0b111;
-	camposD[1] = acceso >>= 3 & 0b11;
-	camposD[2] = acceso >> 2 & 0b11111;
+	camposD[1] = acceso >> 3 & 0b11;
+	camposD[2] = acceso >> 5 & 0b11111;
 	
-	return camposD;
+	//printf("Campo 1: %X // Campo 2: %X // Campo 3: %X\n", camposD[0], camposD[1], camposD[2]);
+	
+	//return camposD;
 }
 
 void inicializarCache(T_LINEA_CACHE  * lineaCache){
@@ -90,17 +91,4 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 		
 	}
 	
-}
-char comprobarCache(FILE *f, FILE *ram, int *campos, unsigned char RAM[1024], T_LINEA_CACHE*  lineaCache){
-	int bloque;
-	char c;
-	bloque = campos[1] + campos[2];
-
-	if(campos[2] != lineaCache[0].ETQ){
-		lineaCache[0].ETQ = campos[2];
-		printf("Esto es la ETQ de la cache ->%d\n",lineaCache[0].ETQ);
-	}
-//	printf("Campo 1: %d // Campo 2: %d // Campo 3: %d // Bloque: %d\n", campos[0], campos[1], campos[2], bloque);
-
-	return c;
 }
