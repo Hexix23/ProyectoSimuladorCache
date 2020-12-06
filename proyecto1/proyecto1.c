@@ -47,10 +47,10 @@ int main (int argc,char **argv){
 
 /*leemos fichero*/
 	f = fopen("accesos_memoria.txt", "r");
-	/*if (f ==NULL){
+	if (f ==NULL){
 		printf("el fichero acceso_memoria.txt no existe");
 		exit(-1);
-	}*/	
+	}
 	
 	while (!feof(f)){
 		acceso = leerFichero(f);
