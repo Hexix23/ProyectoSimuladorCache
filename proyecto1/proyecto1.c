@@ -28,7 +28,8 @@ int main (int argc,char **argv){
 	int acceso;
 	int mover;
 	int i;
-	int camposD[4];
+	int camposD[3];
+	int bloque;
 	T_LINEA_CACHE lineaCache[4];
 
 /*Inicializamos Cache*/
@@ -74,34 +75,37 @@ int main (int argc,char **argv){
 			printf("Acierto de cache....\n");
 		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
-		Sleep(2000);
-	}
-	texto[tamTexto] = '\0';
-	printf("%s", texto);
 
-    int a=4;
-    //imprimir fallos y aciertos
-    if(camposD[2] != lineaCache[a].ETQ){
-		numfallos+=1;
-		printf("T: %d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],camposD[3]);
-		tiempoglobal+=10;
+		 int a=4;
+		 bloque = camposD[1] + camposD[2];
+    	//imprimir fallos y aciertos
+    	if(camposD[2] != lineaCache[a].ETQ){
+			numfallos+=1;
+			printf("T: %d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],bloque);
+			tiempoglobal+=10;
 
-		printf("\n cargando el bloque %02X y la linea %02X",camposD[3], camposD[1]);
-	}else
-	{
-		printf(" T: %d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],camposD[3]);
-	}
+			printf("\n cargando el bloque %02X y la linea %02X",camposD[3], camposD[1]);
+		}else
+		{
+			printf(" T: %d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],bloque);
+		}
 
 
     //imprimir los datos
-    for(a=0; a<4; a++){
-		printf("\n ETQ: %X",lineaCache[a].ETQ);
-		printf("\t datos: ");
+    	for(a=0; a<4; a++){
+			printf("\n ETQ: %X",lineaCache[a].ETQ);
+			printf("\t datos: ");
 		for(i=0; i<8;i++){
 			printf("%X",lineaCache[a].Datos[i]);
 		}
 
 	}
+		Sleep(2000);
+	}
+	texto[tamTexto] = '\0';
+	printf("%s", texto);
+
+   
 
 	int cont_acc, tiempo_medio;
     datos_finales(numfallos,tiempoglobal,cont_acc,tiempo_medio);
@@ -125,7 +129,7 @@ void separarCampos(int acceso, int *camposD){
 	camposD[0] = acceso & 0b111;
 	camposD[1] = acceso >> 3 & 0b11;
 	camposD[2] = acceso >> 5 & 0b11111;
-    camposD[3] = acceso >> 3 & 0b1111111;
+
 }
 
 void inicializarCache(T_LINEA_CACHE  * lineaCache){
