@@ -87,7 +87,7 @@ int main (int argc,char **argv){
 			printf("\n cargando el bloque %02X y la linea %02X",camposD[3], camposD[1]);
 		}else
 		{
-			printf(" T: %d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],bloque);
+			printf(" T: %d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],lineaCache[a].Datos[i]);
 		}
 
 
