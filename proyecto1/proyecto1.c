@@ -5,7 +5,7 @@
 // para linux usar #include <unistd.h>
 
 int numfallos = 0;
-float tiempoglobal = 0;
+int tiempoglobal = 0;
 
 typedef struct{
     short int ETQ;
@@ -15,6 +15,7 @@ typedef struct{
 int leerFichero(FILE *f);
 void separarCampos(int acceso, int *camposD);
 void inicializarCache(T_LINEA_CACHE*  lineaCache);
+void datos_finales(int num_fallos,int tiempoglobal, int cont_acc,int tiempo_medio);
 
 /* Función principal */
 int main (int argc,char **argv){
@@ -26,6 +27,9 @@ int main (int argc,char **argv){
 	int acceso;
 	int mover;
 	int i;
+	int bloque;
+	int cont_acc = 0;
+	int tiempo_medio;
 	int camposD[3];
 	T_LINEA_CACHE lineaCache[4];
 
@@ -34,6 +38,10 @@ int main (int argc,char **argv){
 
 /*Leemos RAM*/
 	ram = fopen("RAM.bin", "rb"); //abre archivo en modo binario
+	if (ram ==NULL){
+		printf("el fichero ram.bin no existe");
+		exit(-1);
+	}
 	
 	rewind(ram);  
 	fgets(RAM, 1024, ram);
@@ -41,34 +49,49 @@ int main (int argc,char **argv){
 
 /*leemos fichero*/
 	f = fopen("accesos_memoria.txt", "r");	
-	
+	if (f ==NULL){
+		printf("el fichero acceso_memoria.txt no existe");
+		exit(-1);
+	}
+
+
 	while (!feof(f)){
 		acceso = leerFichero(f);
 		separarCampos(acceso, camposD); 
+		tiempoglobal += 1;
+		bloque = camposD[1] + camposD[2];
 		if(lineaCache[camposD[1]].ETQ != camposD[2]){
-		  printf("Ha habido un error en la linea %02X con la etiqueta %X\n", camposD[1], lineaCache[camposD[1]].ETQ);
+		  tiempoglobal += 10;
+		  
+		  printf("\nT:%d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X\n", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],bloque);
+		  printf("Cargando el bloque %X y la linea %02X",bloque, camposD[1]);
+		  
 		  lineaCache[camposD[1]].ETQ = camposD[2];
 		  mover = acceso & 0b1111111000; 
-		  printf("Datos: ");
+		  
 		  for(i = 0; i < 8; i++){
 			lineaCache[camposD[1]].Datos[i] = RAM[(mover++)];
 		  }
-		  while(i--){
-			printf("%X", lineaCache[camposD[1]].Datos[i]);
-		    printf(" ");
-		  }
-		  printf("\n");
+
 		  numfallos++;
-		  tiempoglobal += 10;
 		}
-		else{
-			printf("Acierto de cache....\n");
+		else{	
+			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X\n", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],lineaCache[camposD[1]].Datos[i]);
+			printf("ETQ:%X  Datos: ",camposD[2]);
+			while(i--){
+				printf("%X", lineaCache[camposD[1]].Datos[i]);
+		    	printf(" ");
+		  	}
 		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
+		cont_acc++;
 		Sleep(2000);
 	}
 	texto[tamTexto] = '\0';
 	printf("%s", texto);
+	
+    datos_finales(numfallos,tiempoglobal,cont_acc,tiempo_medio);
+	
 	fclose(f);
 
    return 0;
@@ -100,5 +123,11 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 		}
 		
 	}
+	
+}
+void datos_finales(int numfallos,int tiempoglobal, int cont_acc,int tiempo_medio ){
+  
+    tiempo_medio = tiempoglobal / (numfallos + cont_acc);
+    printf("\n\nEl numero total de accesos ha sido: %d, el numero total de fallos ha sido: %d y el tiempo medio es: %d",cont_acc, numfallos, tiempo_medio);
 	
 }
