@@ -77,21 +77,30 @@ int main (int argc,char **argv){
 		}
 		else{	
 			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X\n", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],lineaCache[camposD[1]].Datos[i]);
+			
 			printf("ETQ:%X  Datos: ",camposD[2]);
+			
 			while(i--){
 				printf("%X", lineaCache[camposD[1]].Datos[i]);
-		    	printf(" ");
-		  	}
-		}
+		   		printf(" ");
+			}
+
+			//imprimir los datos
+			/*for(int a=0; a<4; a++){
+				printf("\nETQ:%X Datos:",lineaCache[a].ETQ);
+				for(i=0; i<8;i++){
+					printf("%X",lineaCache[a].Datos[i]);
+				}*/
+			}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
 		cont_acc++;
 		Sleep(2000);
-	}
+		}
 	texto[tamTexto] = '\0';
-	printf("%s", texto);
 	
     datos_finales(numfallos,tiempoglobal,cont_acc,tiempo_medio);
-	
+	printf("\nString final: %s", texto);
+
 	fclose(f);
 
    return 0;
