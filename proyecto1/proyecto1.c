@@ -76,14 +76,15 @@ int main (int argc,char **argv){
 		  numfallos++;
 		}
 		else{	
-			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[i]);
+			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[camposD[0]]);
 			
     		for(int a=0; a<4; a++){
 				printf("\nETQ:%X   Datos: ",lineaCache[a].ETQ);
 				for(i=7; i>0;i--){
 					printf("%X ",lineaCache[a].Datos[i]);
 				}
-			}			
+			}
+			printf("\n");			
 		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
 		cont_acc++;
