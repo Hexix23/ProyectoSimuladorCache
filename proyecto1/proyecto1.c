@@ -96,7 +96,7 @@ int main (int argc,char **argv){
 	printf("\nString final: %s", texto);
 
 	fclose(f);
-
+ 
    return 0;
 }
 
