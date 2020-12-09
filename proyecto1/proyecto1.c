@@ -64,7 +64,7 @@ int main (int argc,char **argv){
 		  tiempoglobal += 10;
 		  
 		  printf("\nT:%d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X\n", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],bloque);
-		  printf("Cargando el bloque %X y la linea %02X",bloque, camposD[1]);
+		  printf("Cargando el bloque %X y la linea %02X\n",bloque, camposD[1]);
 		  
 		  lineaCache[camposD[1]].ETQ = camposD[2];
 		  mover = acceso & 0b1111111000; 
@@ -76,22 +76,15 @@ int main (int argc,char **argv){
 		  numfallos++;
 		}
 		else{	
-			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %02X\n", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],lineaCache[camposD[1]].Datos[i]);
+			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[i]);
 			
-			printf("ETQ:%X  Datos: ",camposD[2]);
-			
-			while(i--){
-				printf("%X", lineaCache[camposD[1]].Datos[i]);
-		   		printf(" ");
-			}
-
-			//imprimir los datos
-			/*for(int a=0; a<4; a++){
-				printf("\nETQ:%X Datos:",lineaCache[a].ETQ);
-				for(i=0; i<8;i++){
-					printf("%X",lineaCache[a].Datos[i]);
-				}*/
-			}
+    		for(int a=0; a<4; a++){
+				printf("\nETQ:%X   Datos: ",lineaCache[a].ETQ);
+				for(i=7; i>0;i--){
+					printf("%X ",lineaCache[a].Datos[i]);
+				}
+			}			
+		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
 		cont_acc++;
 		Sleep(2000);
@@ -137,6 +130,6 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 void datos_finales(int numfallos,int tiempoglobal, int cont_acc,int tiempo_medio ){
   
     tiempo_medio = tiempoglobal / (numfallos + cont_acc);
-    printf("\n\nEl numero total de accesos ha sido: %d, el numero total de fallos ha sido: %d y el tiempo medio es: %d",cont_acc, numfallos, tiempo_medio);
+    printf("El numero total de accesos ha sido: %d, el numero total de fallos ha sido: %d y el tiempo medio es: %d",cont_acc, numfallos, tiempo_medio);
 	
 }
