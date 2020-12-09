@@ -76,15 +76,15 @@ int main (int argc,char **argv){
 		  numfallos++;
 		}
 		else{	
-			printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[camposD[0]]);
+			printf("\nT:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[camposD[0]]);
 			
     		for(int a=0; a<4; a++){
-				printf("\nETQ:%X   Datos: ",lineaCache[a].ETQ);
+				printf("ETQ:%X   Datos: ",lineaCache[a].ETQ);
 				for(i=7; i>0;i--){
 					printf("%X ",lineaCache[a].Datos[i]);
 				}
+				printf("\n");
 			}
-			printf("\n");			
 		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
 		cont_acc++;
@@ -131,6 +131,6 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 void datos_finales(int numfallos,int tiempoglobal, int cont_acc,int tiempo_medio ){
   
     tiempo_medio = tiempoglobal / (numfallos + cont_acc);
-    printf("El numero total de accesos ha sido: %d, el numero total de fallos ha sido: %d y el tiempo medio es: %d",cont_acc, numfallos, tiempo_medio);
+    printf("\nEl numero total de accesos ha sido: %d, el numero total de fallos ha sido: %d y el tiempo medio es: %d",cont_acc, numfallos, tiempo_medio);
 	
 }
