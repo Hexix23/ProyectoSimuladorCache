@@ -61,9 +61,8 @@ int main (int argc,char **argv){
 		tiempoglobal += 1;
 		bloque = camposD[1] + camposD[2];
 		if(lineaCache[camposD[1]].ETQ != camposD[2]){
-		  tiempoglobal += 10;
 		  
-		  printf("\nT:%d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X\n", tiempoglobal,numfallos,acceso ,camposD[0],camposD[1],camposD[2],bloque);
+		  printf("\nT:%d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X\n", tiempoglobal,numfallos,acceso ,camposD[2],camposD[1],camposD[0],bloque);
 		  printf("Cargando el bloque %X y la linea %02X\n",bloque, camposD[1]);
 		  
 		  lineaCache[camposD[1]].ETQ = camposD[2];
@@ -73,7 +72,18 @@ int main (int argc,char **argv){
 			lineaCache[camposD[1]].Datos[i] = RAM[(mover++)];
 		  }
 
+		  tiempoglobal += 10;
 		  numfallos++;
+
+		  printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[camposD[0]]);
+	      for(int a=0; a<4; a++){
+				printf("ETQ:%X   Datos: ",lineaCache[a].ETQ);
+				for(i=7; i>0;i--){
+					printf("%X ",lineaCache[a].Datos[i]);
+				}
+				printf("\n");
+			}
+
 		}
 		else{	
 			printf("\nT:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[camposD[0]]);
