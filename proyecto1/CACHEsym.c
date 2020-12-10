@@ -2,16 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 //#include <windows.h>
-#include <unistd.h>
+#include <unistd.h> //esta libreria es para Linux
 
 int numfallos = 0;
 int tiempoglobal = 0;
 
+
+//inicializamos struct
 typedef struct{
     short int ETQ;
     short int Datos[8];
 } T_LINEA_CACHE;
 
+//declaramos funciones
 int leerFichero(FILE *f);
 void separarCampos(int acceso, int *camposD);
 void inicializarCache(T_LINEA_CACHE*  lineaCache);
