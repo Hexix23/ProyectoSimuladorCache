@@ -54,12 +54,13 @@ int main (int argc,char **argv){
 		exit(-1);
 	}
 
-
+	/*leemos fichero memoria hasta el final*/
 	while (!feof(f)){
 		acceso = leerFichero(f);
 		separarCampos(acceso, camposD); 
 		tiempoglobal += 1;
 		bloque = camposD[1] + camposD[2];
+		/*comprobamos los fallos y aciertos de cache*/
 		if(lineaCache[camposD[1]].ETQ != camposD[2]){
 		  
 		  printf("\nT:%d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X\n", tiempoglobal,numfallos,acceso ,camposD[2],camposD[1],camposD[0],bloque);
