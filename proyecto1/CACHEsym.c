@@ -103,19 +103,22 @@ int main (int argc,char **argv){
 	texto[tamTexto] = '\0';
 	
     datos_finales(numfallos,tiempoglobal,cont_acc,tiempo_medio);
+	/*imprimimos el texto final*/
 	printf("\nString final: %s", texto);
-
+	/*cerramos el fichero*/
 	fclose(f);
  
    return 0;
 }
 
+/*leemos fichero accesos_memoria*/
 int leerFichero(FILE *f){
 	char numADDR[5]; 
 
 	fscanf(f, "%s", numADDR);
 	return (int)strtol(numADDR, NULL, 16);
 }
+/*separamos la palabra, linea y la etiqueta*/
 void separarCampos(int acceso, int *camposD){
 
 	camposD[0] = acceso & 0b111;
@@ -123,7 +126,7 @@ void separarCampos(int acceso, int *camposD){
 	camposD[2] = acceso >> 5 & 0b11111;
 
 }
-
+/*inicializamos las etiquetas a FF y los datos a 0*/
 void inicializarCache(T_LINEA_CACHE  * lineaCache){
 	int i;
 	int a = 4;
@@ -138,6 +141,7 @@ void inicializarCache(T_LINEA_CACHE  * lineaCache){
 	}
 	
 }
+/*imprimimos el tiempo medio, numero de fallos y numero de accesos*/
 void datos_finales(int numfallos,int tiempoglobal, int cont_acc,int tiempo_medio ){
   
     tiempo_medio = tiempoglobal / (numfallos + cont_acc);
