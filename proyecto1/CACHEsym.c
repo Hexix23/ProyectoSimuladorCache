@@ -107,7 +107,7 @@ int main (int argc,char **argv){
 	texto[tamTexto] = '\0';
 	
     datos_finales(numfallos,tiempoglobal,cont_acc,tiempo_medio);
-	/*imprimimos el texto final*/
+	/*imprimimos el STRING final*/
 	printf("\nString final: %s", texto);
 	/*cerramos el fichero*/
 	fclose(f);
@@ -119,15 +119,15 @@ int main (int argc,char **argv){
 int leerFichero(FILE *f){
 	char numADDR[5]; 
 
-	fscanf(f, "%s", numADDR);
-	return (int)strtol(numADDR, NULL, 16);
+	fscanf(f, "%s", numADDR); //escaneamos direccion de memoria
+	return (int)strtol(numADDR, NULL, 16); //retornamos al main haciendo un cast a INT utilizando el strtol para convertir el STRING(base 16 para poder interpretar el STRING) a int 
 }
 /*separamos la palabra, linea y la etiqueta*/
 void separarCampos(int acceso, int *camposD){
 
-	camposD[0] = acceso & 0b111;
-	camposD[1] = acceso >> 3 & 0b11;
-	camposD[2] = acceso >> 5 & 0b11111;
+	camposD[0] = acceso & 0b111; // palabra
+	camposD[1] = acceso >> 3 & 0b11; //movemos los 3 bits de la palabra para quedarnos con la LINEA
+	camposD[2] = acceso >> 5 & 0b11111;// movemos 5 bits (3 palabra - 2 linea)para quedarnos con la ETQ.
 
 }
 /*inicializamos las etiquetas a FF y los datos a 0*/
