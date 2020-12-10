@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 //#include <windows.h>
-#include <unistd.h> //esta libreria es para Linux
+#include <unistd.h> //esta nos permite utilizar el sleep en linux
 
 int numfallos = 0;
 int tiempoglobal = 0;
@@ -16,14 +16,14 @@ typedef struct{
 
 //declaramos funciones
 int leerFichero(FILE *f);
-void separarCampos(int acceso, int *camposD);
-void inicializarCache(T_LINEA_CACHE*  lineaCache);
-void datos_finales(int num_fallos,int tiempoglobal, int cont_acc,int tiempo_medio);
+void separarCampos(int acceso, int *camposD); 
+void inicializarCache(T_LINEA_CACHE*  lineaCache); 
+void datos_finales(int num_fallos,int tiempoglobal, int cont_acc,int tiempo_medio); 
 
 /* Función principal */
 int main (int argc,char **argv){
 	FILE *f = NULL;
-	FILE *ram;
+	FILE *ram = NULL;
 	unsigned char RAM[1024];
 	char texto[100];
 	int tamTexto;
@@ -46,9 +46,9 @@ int main (int argc,char **argv){
 		exit(-1);
 	}
 	
-	rewind(ram);  
-	fgets(RAM, 1024, ram);
-	fclose(ram);
+	rewind(ram); //colocamos el puntero al principio del archivo de ram 
+	fgets(RAM, 1024, ram); //guardamos en un arrays de CHAR el archivo leido anteriormente 
+	fclose(ram); //cerramos el archivo
 
 /*leemos fichero*/
 	f = fopen("accesos_memoria.txt", "r");	
