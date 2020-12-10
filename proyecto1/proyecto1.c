@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
-// para linux usar #include <unistd.h>
+//#include <windows.h>
+#include <unistd.h>
 
 int numfallos = 0;
 int tiempoglobal = 0;
@@ -88,7 +88,7 @@ int main (int argc,char **argv){
 		}
 		texto[tamTexto++] = lineaCache[camposD[1]].Datos[camposD[0]];
 		cont_acc++;
-		Sleep(2000);
+		sleep(2);
 		}
 	texto[tamTexto] = '\0';
 	
