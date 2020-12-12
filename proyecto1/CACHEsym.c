@@ -64,23 +64,23 @@ int main (int argc,char **argv){
 		tiempoglobal += 1;
 		bloque = camposD[1] + camposD[2];
 		/*comprobamos los fallos y aciertos de cache*/
-		if(lineaCache[camposD[1]].ETQ != camposD[2]){
+		if(lineaCache[camposD[1]].ETQ != camposD[2]){ //entra en el bucle si hay fallo(Si la ETQ de la cache != a la etiqueta del acceso a memoria)
 		  
 		  printf("\nT:%d, Fallo de CACHE %d, ADDR %04X ETQ %X linea %02X palabra %02X bloque %02X\n", tiempoglobal,numfallos,acceso ,camposD[2],camposD[1],camposD[0],bloque);
 		  printf("Cargando el bloque %X y la linea %02X\n",bloque, camposD[1]);
 		  
-		  lineaCache[camposD[1]].ETQ = camposD[2];
+		  lineaCache[camposD[1]].ETQ = camposD[2]; 
 		  mover = acceso & 0b1111111000; 
 		  
-		  for(i = 0; i < 8; i++){
+		  for(i = 0; i < 8; i++){ //cargamos dato a dato de la RAM a la linea de la cache especifica  
 			lineaCache[camposD[1]].Datos[i] = RAM[(mover++)];
 		  }
 
-		  tiempoglobal += 10;
-		  numfallos++;
+		  tiempoglobal += 10; //se incrementa el tiempoglobal
+		  numfallos++; //sumamos 1 al numero de fallos
 
 		  printf("T:%d, Acierto de CACHE, ADDR %04X ETQ %X linea %02X palabra %02X DATO %2X\n", tiempoglobal, acceso, camposD[2], camposD[1], camposD[0], lineaCache[camposD[1]].Datos[camposD[0]]);
-	      for(int a=0; a<4; a++){
+	      for(int a=0; a<4; a++){ //printea los datos de las lineas de la cache
 				printf("ETQ:%X   Datos: ",lineaCache[a].ETQ);
 				for(i=7; i >= 0;i--){
 					printf("%X ",lineaCache[a].Datos[i]);
@@ -104,7 +104,7 @@ int main (int argc,char **argv){
 		cont_acc++;
 		sleep(2);
 		}
-	texto[tamTexto] = '\0';
+	texto[tamTexto] = '\0'; //añadimos el final del string para designarlo y cerrarlo
 	
     datos_finales(numfallos,tiempoglobal,cont_acc,tiempo_medio);
 	/*imprimimos el STRING final*/
@@ -131,7 +131,7 @@ void separarCampos(int acceso, int *camposD){
 
 }
 /*inicializamos las etiquetas a FF y los datos a 0*/
-void inicializarCache(T_LINEA_CACHE  * lineaCache){
+void inicializarCache(T_LINEA_CACHE  *lineaCache){
 	int i;
 	int a = 4;
 	
